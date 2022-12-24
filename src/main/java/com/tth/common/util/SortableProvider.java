@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.domain.Sort;
 
-import com.tth.common.exception.UnsupportedSortFieldException;
+import com.tth.common.exception.UnsupportedSortPropertyException;
 
 public class SortableProvider {
 
@@ -16,7 +16,7 @@ public class SortableProvider {
 		Collection<String> unsupportedFields = CollectionUtils.removeAll(inputFields, sortableFields);
 		
 		if (CollectionUtils.isNotEmpty(unsupportedFields)) {
-			throw new UnsupportedSortFieldException(unsupportedFields);
+			throw new UnsupportedSortPropertyException(unsupportedFields);
 		}
 	}
 

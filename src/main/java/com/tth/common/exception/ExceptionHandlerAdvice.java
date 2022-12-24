@@ -71,7 +71,7 @@ public class ExceptionHandlerAdvice {
 		ConstraintViolationException.class,
 		MissingServletRequestParameterException.class,
 		HttpMediaTypeNotSupportedException.class,
-		UnsupportedSortFieldException.class,
+		UnsupportedSortPropertyException.class,
 	})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	ResponseBody<?> handle(Exception ex, WebRequest request) {
