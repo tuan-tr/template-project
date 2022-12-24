@@ -19,9 +19,11 @@ public class JacksonConfiguration {
 	@Bean
 	ObjectMapper objectMapper() {
 		ObjectMapper objectMapper = new Jackson2ObjectMapperBuilder()
-				.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
+				.featuresToDisable(
+						SerializationFeature.FAIL_ON_EMPTY_BEANS,
+						SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
 						DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE,
-						SerializationFeature.FAIL_ON_EMPTY_BEANS)
+						DeserializationFeature.ACCEPT_FLOAT_AS_INT)
 				// .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
 				.serializationInclusion(JsonInclude.Include.NON_NULL)
 				.mixIn(PageImpl.class, PageImplMixIn.class)
