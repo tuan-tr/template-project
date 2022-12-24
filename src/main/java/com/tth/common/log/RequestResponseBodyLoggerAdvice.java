@@ -22,8 +22,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tth.common.jackson.JsonParserProvider;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,7 +32,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class RequestResponseBodyLoggerAdvice implements RequestBodyAdvice, ResponseBodyAdvice<Object> {
 
-	private ObjectMapper objectMapper;
+	private JsonParserProvider jsonParserProvider;
 	private HttpServletRequest servletRequest;
 
 	@Override
@@ -58,7 +57,7 @@ public class RequestResponseBodyLoggerAdvice implements RequestBodyAdvice, Respo
 		requestData.put("method", servletRequest.getMethod());
 		requestData.put("uri", servletRequest.getRequestURI());
 		requestData.put("requestBody", body);
-		log.debug(parseToJsonString(requestData));
+		log.debug(jsonParserProvider.toString(requestData));
 		return body;
 	}
 
@@ -96,24 +95,17 @@ public class RequestResponseBodyLoggerAdvice implements RequestBodyAdvice, Respo
 			level = Level.TRACE;
 		}
 		
-		Map<String, Object> responseData = new LinkedHashMap<>();
-		responseData.put("sessionId", servletRequest.getSession().getId());
-		responseData.put("method", servletRequest.getMethod());
-		responseData.put("uri", servletRequest.getRequestURI());
-		responseData.put("status", servletResponse.getStatus());
-		responseData.put("responseBody", body);
-		log.log(level, parseToJsonString(responseData));
+		if (log.isEnabled(level)) {
+			Map<String, Object> responseData = new LinkedHashMap<>();
+			responseData.put("sessionId", servletRequest.getSession().getId());
+			responseData.put("method", servletRequest.getMethod());
+			responseData.put("uri", servletRequest.getRequestURI());
+			responseData.put("status", servletResponse.getStatus());
+			responseData.put("responseBody", body);
+			log.log(level, jsonParserProvider.toString(responseData));
+		}
 		
 		return body;
-	}
-
-	private String parseToJsonString(Object object) {
-		try {
-			return objectMapper.writeValueAsString(object);
-		} catch (JsonProcessingException ex) {
-			ex.printStackTrace();
-			return object.toString();
-		}
 	}
 
 }
