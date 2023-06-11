@@ -1,4 +1,4 @@
-package com.tth.baseproject.config;
+package com.tth.template.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.tth.baseproject.exception;
+package com.tth.template.exception;
 
 public enum ErrorCode {
 

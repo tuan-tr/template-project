@@ -18,9 +18,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tth.baseproject.service.context.UserContextService;
 import com.tth.common.auth.TokenPayload;
 import com.tth.common.auth.UserContext;
+import com.tth.template.service.context.UserContextService;
 
 import lombok.AllArgsConstructor;
 

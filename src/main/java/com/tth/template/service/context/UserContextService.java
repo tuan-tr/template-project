@@ -1,4 +1,4 @@
-package com.tth.baseproject.service.context;
+package com.tth.template.service.context;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

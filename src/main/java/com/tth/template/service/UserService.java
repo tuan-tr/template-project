@@ -1,4 +1,4 @@
-package com.tth.baseproject.service;
+package com.tth.template.service;
 
 import java.util.List;
 import java.util.Map;
@@ -9,17 +9,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tth.baseproject.dto.user.UserCreateInput;
-import com.tth.baseproject.dto.user.UserDto;
-import com.tth.baseproject.dto.user.UserUpdateInput;
-import com.tth.baseproject.exception.ErrorCode;
-import com.tth.baseproject.projector.UserProjector;
 import com.tth.common.exception.BadBusinessRequestException;
 import com.tth.common.exception.DataNotFoundException;
 import com.tth.persistence.constant.UserStatus;
 import com.tth.persistence.entity.User;
 import com.tth.persistence.provider.filter.UserFilter;
 import com.tth.persistence.repository.UserRepository;
+import com.tth.template.dto.user.UserCreateInput;
+import com.tth.template.dto.user.UserDto;
+import com.tth.template.dto.user.UserUpdateInput;
+import com.tth.template.exception.ErrorCode;
+import com.tth.template.projector.UserProjector;
 
 import lombok.AllArgsConstructor;
 

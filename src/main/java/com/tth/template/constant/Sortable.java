@@ -1,4 +1,4 @@
-package com.tth.baseproject.constant;
+package com.tth.template.constant;
 
 import java.util.Arrays;
 import java.util.List;

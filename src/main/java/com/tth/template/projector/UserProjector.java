@@ -1,10 +1,10 @@
-package com.tth.baseproject.projector;
+package com.tth.template.projector;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tth.baseproject.dto.user.UserDto;
 import com.tth.persistence.entity.User;
+import com.tth.template.dto.user.UserDto;
 
 public class UserProjector {
 

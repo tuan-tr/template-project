@@ -1,4 +1,4 @@
-package com.tth.baseproject.dto.user;
+package com.tth.template.dto.user;
 
 import java.time.OffsetDateTime;
 
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @ValidRangeDateTime(from = "effectiveFrom", to = "effectiveTo")
-public class UserUpdateInput {
+public class UserCreateInput {
 
 	private UserStatus status;
 

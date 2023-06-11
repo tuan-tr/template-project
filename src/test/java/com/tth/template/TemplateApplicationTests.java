@@ -1,10 +1,10 @@
-package com.tth.baseProject;
+package com.tth.template;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BaseProjectApplicationTests {
+class TemplateApplicationTests {
 
 	@Test
 	void contextLoads() {

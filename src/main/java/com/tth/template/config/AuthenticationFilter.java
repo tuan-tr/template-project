@@ -1,4 +1,4 @@
-package com.tth.baseproject.config;
+package com.tth.template.config;
 
 import java.io.IOException;
 
@@ -14,8 +14,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.tth.baseproject.service.context.UserContextService;
 import com.tth.common.auth.UserContext;
+import com.tth.template.service.context.UserContextService;
 
 import lombok.AllArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.tth.baseproject.config;
+package com.tth.template.config;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;

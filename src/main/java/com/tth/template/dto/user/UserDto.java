@@ -1,4 +1,4 @@
-package com.tth.baseproject.dto.user;
+package com.tth.template.dto.user;
 
 import java.time.OffsetDateTime;
 
