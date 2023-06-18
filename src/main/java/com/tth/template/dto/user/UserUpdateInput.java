@@ -1,15 +1,13 @@
 package com.tth.template.dto.user;
 
-import java.time.OffsetDateTime;
-
-import javax.validation.constraints.NotBlank;
-
 import com.tth.common.validation.AfterCurrentTime;
 import com.tth.common.validation.ValidRangeDateTime;
 import com.tth.persistence.constant.UserStatus;
-
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.OffsetDateTime;
 
 @NoArgsConstructor
 @Getter

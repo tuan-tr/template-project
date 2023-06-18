@@ -1,9 +1,9 @@
 package com.tth.common.validation;
 
-import java.time.OffsetDateTime;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import java.time.OffsetDateTime;
 
 public class AfterCurrentTimeValidator implements ConstraintValidator<AfterCurrentTime, Object> {
 

@@ -1,20 +1,17 @@
 package com.tth.common.log;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.tth.common.jackson.JsonParserProvider;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.tth.common.jackson.JsonParserProvider;
-
-import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Component
 @AllArgsConstructor

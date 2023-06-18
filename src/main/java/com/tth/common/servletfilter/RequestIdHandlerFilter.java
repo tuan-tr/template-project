@@ -1,12 +1,11 @@
 package com.tth.common.servletfilter;
 
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.tth.common.http.CustomHttpHeaders;
+import com.tth.common.util.NanoIdUtils;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.core.Ordered;
@@ -14,8 +13,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.tth.common.http.CustomHttpHeaders;
-import com.tth.common.util.NanoIdUtils;
+import java.io.IOException;
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE)

@@ -1,5 +1,4 @@
 SERVER_PORT: 8091
-SERVLET_CONTEXT_PATH:
 # NON_AUTHENTICATED_PATHS: /actuator/**, /docs/**, /swagger-ui/**
 
 DATASOURCE:

@@ -1,9 +1,12 @@
 package com.tth.common.exception;
 
-import java.util.stream.Collectors;
-
-import javax.validation.ConstraintViolationException;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tth.common.http.ResponseBody;
+import com.tth.common.http.ResponseMetadata;
+import com.tth.common.i18n.Translator;
+import jakarta.validation.ConstraintViolationException;
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -19,13 +22,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.tth.common.http.ResponseBody;
-import com.tth.common.http.ResponseMetadata;
-import com.tth.common.i18n.Translator;
-
-import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @AllArgsConstructor

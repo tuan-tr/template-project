@@ -1,13 +1,12 @@
 package com.tth.template.config;
 
+import com.tth.common.auth.AuthEnviroment;
+import com.tth.common.servletfilter.RequestIdHandlerFilter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import com.tth.common.auth.AuthEnviroment;
-import com.tth.common.servletfilter.RequestIdHandlerFilter;
 
 @Configuration
 @EntityScan(basePackages = "com.tth.persistence.entity")

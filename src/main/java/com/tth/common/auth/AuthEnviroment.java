@@ -1,17 +1,15 @@
 package com.tth.common.auth;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "auth")
-@ConstructorBinding
 @AllArgsConstructor
 @Getter
 public final class AuthEnviroment {
 
 	private final String[] nonAuthenticatedPaths;
+	private final String[] corsAllowedOrigins;
 
 }

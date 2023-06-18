@@ -1,10 +1,10 @@
 package com.tth.common.validation;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
 import java.lang.reflect.Field;
 import java.time.OffsetDateTime;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 public class RangeDateTimeValidator implements ConstraintValidator<ValidRangeDateTime, Object> {
 

@@ -1,13 +1,10 @@
 package com.tth.common.log;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.tth.common.jackson.JsonParserProvider;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
@@ -22,10 +19,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import com.tth.common.jackson.JsonParserProvider;
-
-import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 @AllArgsConstructor
