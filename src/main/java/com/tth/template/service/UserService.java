@@ -1,14 +1,6 @@
 package com.tth.template.service;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.querydsl.core.types.Predicate;
 import com.tth.common.exception.BadBusinessRequestException;
 import com.tth.common.exception.DataNotFoundException;
 import com.tth.persistence.constant.UserStatus;
@@ -20,15 +12,22 @@ import com.tth.template.dto.user.UserDto;
 import com.tth.template.dto.user.UserUpdateInput;
 import com.tth.template.exception.ErrorCode;
 import com.tth.template.projector.UserProjector;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AllArgsConstructor;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional(readOnly = true)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
-	private UserRepository userRepo;
+	private final UserRepository userRepo;
 
 	public User getEntityOrThrowBadRequest(String id) {
 		return userRepo.findById(id)
@@ -41,8 +40,8 @@ public class UserService {
 		User entity = User.builder()
 				.status(UserStatus.ACTIVE)
 				.name(input.getName())
-				.effectiveFrom(input.getEffectiveFrom())
-				.effectiveTo(input.getEffectiveTo())
+				.effectiveStart(input.getEffectiveStart())
+				.effectiveEnd(input.getEffectiveEnd())
 				.build();
 		
 		userRepo.save(entity);
@@ -57,8 +56,8 @@ public class UserService {
 		User entity = getEntityOrThrowBadRequest(id);
 		entity.setName(input.getName());
 		entity.setStatus(input.getStatus());
-		entity.setEffectiveFrom(input.getEffectiveFrom());
-		entity.setEffectiveTo(input.getEffectiveTo());
+		entity.setEffectiveStart(input.getEffectiveStart());
+		entity.setEffectiveEnd(input.getEffectiveEnd());
 	}
 
 	public UserDto getDetail(String id) {
@@ -72,6 +71,12 @@ public class UserService {
 
 	public Page<UserDto> searchPaging(UserFilter filter, Pageable pageable) {
 		Page<User> page = userRepo.findPaging(filter, pageable);
+		List<UserDto> content = UserProjector.toPageDto(page.getContent());
+		return new PageImpl<>(content, pageable, page.getTotalElements());
+	}
+
+	public Page<UserDto> search(Predicate predicate, Pageable pageable) {
+		Page<User> page = userRepo.findAll(predicate, pageable);
 		List<UserDto> content = UserProjector.toPageDto(page.getContent());
 		return new PageImpl<>(content, pageable, page.getTotalElements());
 	}

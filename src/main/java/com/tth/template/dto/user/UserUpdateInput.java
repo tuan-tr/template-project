@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 
 @NoArgsConstructor
 @Getter
-@ValidRangeDateTime(from = "effectiveFrom", to = "effectiveTo")
+@ValidRangeDateTime(from = "effectiveStart", to = "effectiveEnd")
 public class UserUpdateInput {
 
 	private UserStatus status;
@@ -20,8 +20,8 @@ public class UserUpdateInput {
 	private String name;
 
 	@AfterCurrentTime
-	private OffsetDateTime effectiveFrom;
+	private OffsetDateTime effectiveStart;
 
-	private OffsetDateTime effectiveTo;
+	private OffsetDateTime effectiveEnd;
 
 }

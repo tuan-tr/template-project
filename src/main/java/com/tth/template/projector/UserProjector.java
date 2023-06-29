@@ -17,8 +17,8 @@ public class UserProjector {
 				.id(entity.getId())
 				.name(entity.getName())
 				.status(entity.getStatus())
-				.effectiveFrom(entity.getEffectiveFrom())
-				.effectiveTo(entity.getEffectiveTo())
+				.effectiveStart(entity.getEffectiveStart())
+				.effectiveEnd(entity.getEffectiveEnd())
 				.build();
 	}
 
@@ -35,8 +35,8 @@ public class UserProjector {
 				.id(entity.getId())
 				.name(entity.getName())
 				.status(entity.getStatus())
-				.effectiveFrom(entity.getEffectiveFrom())
-				.effectiveTo(entity.getEffectiveTo())
+				.effectiveStart(entity.getEffectiveStart())
+				.effectiveEnd(entity.getEffectiveEnd())
 				.build();
 	}
 

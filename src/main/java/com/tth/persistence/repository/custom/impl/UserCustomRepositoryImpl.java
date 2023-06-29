@@ -43,13 +43,13 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 			whereClauseSqlBuilder.append(" AND u.name LIKE :name");
 			parameterMap.put("name", "%" + filter.getName() + "%");
 		}
-		if (filter.getEffectiveFrom() != null) {
-			whereClauseSqlBuilder.append(" AND u.effectiveTo >= :effectiveFrom");
-			parameterMap.put("effectiveFrom", filter.getEffectiveFrom());
+		if (filter.getEffectiveStart() != null) {
+			whereClauseSqlBuilder.append(" AND u.effectiveEnd >= :effectiveStart");
+			parameterMap.put("effectiveStart", filter.getEffectiveStart());
 		}
-		if (filter.getEffectiveTo() != null) {
-			whereClauseSqlBuilder.append(" AND u.effectiveFrom <= :effectiveTo");
-			parameterMap.put("effectiveTo", filter.getEffectiveTo());
+		if (filter.getEffectiveEnd() != null) {
+			whereClauseSqlBuilder.append(" AND u.effectiveStart <= :effectiveEnd");
+			parameterMap.put("effectiveEnd", filter.getEffectiveEnd());
 		}
 		if (filter.getCreatedFrom() != null) {
 			whereClauseSqlBuilder.append(" AND u.createdAt >= :createdFrom");

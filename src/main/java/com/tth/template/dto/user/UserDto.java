@@ -31,8 +31,8 @@ public class UserDto {
 
 	private String name;
 
-	private OffsetDateTime effectiveFrom;
+	private OffsetDateTime effectiveStart;
 
-	private OffsetDateTime effectiveTo;
+	private OffsetDateTime effectiveEnd;
 
 }
