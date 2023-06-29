@@ -26,12 +26,14 @@ springdoc:
     operations-sorter: alpha
     tags-sorter: alpha
 
+environment.mode: local
+
 logging:
   level:
     org:
       hibernate:
         SQL: ${HIBERNATE_SQL_LOG_LEVEL:INFO}
-        type.descriptor.sql.BasicBinder: ${HIBERNATE_SQL_BINDER_LOG_LEVEL:INFO}
+        orm.jdbc.bind: ${HIBERNATE_SQL_BINDER_LOG_LEVEL:INFO}
     com.tth.common.log:
       GetRequestLogger: ${GET_REQUEST_LOG_LEVEL:DEBUG}
       RequestResponseBodyLoggerAdvice: ${REQUEST_RESPONSE_BODY_LOG_LEVEL:DEBUG}
