@@ -8,6 +8,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
@@ -69,6 +70,7 @@ public class ExceptionHandlerAdvice {
 		MissingServletRequestParameterException.class,
 		HttpMediaTypeNotSupportedException.class,
 		UnsupportedSortPropertyException.class,
+		ConversionFailedException.class,
 	})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	ResponseBody<?> handle(Exception ex, WebRequest request) {

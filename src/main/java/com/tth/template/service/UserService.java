@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService {
 
@@ -60,6 +59,7 @@ public class UserService {
 		entity.setEffectiveEnd(input.getEffectiveEnd());
 	}
 
+	@Transactional(readOnly = true)
 	public UserDto getDetail(String id) {
 		User entity = userRepo.findById(id)
 				.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND.name(),
@@ -69,15 +69,17 @@ public class UserService {
 		return dto;
 	}
 
+	@Transactional(readOnly = true)
 	public Page<UserDto> searchPaging(UserFilter filter, Pageable pageable) {
 		Page<User> page = userRepo.findPaging(filter, pageable);
-		List<UserDto> content = UserProjector.toPageDto(page.getContent());
+		List<UserDto> content = UserProjector.toSearchDto(page.getContent());
 		return new PageImpl<>(content, pageable, page.getTotalElements());
 	}
 
+	@Transactional(readOnly = true)
 	public Page<UserDto> search(Predicate predicate, Pageable pageable) {
 		Page<User> page = userRepo.findAll(predicate, pageable);
-		List<UserDto> content = UserProjector.toPageDto(page.getContent());
+		List<UserDto> content = UserProjector.toSearchDto(page.getContent());
 		return new PageImpl<>(content, pageable, page.getTotalElements());
 	}
 

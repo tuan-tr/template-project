@@ -4,6 +4,7 @@ import com.tth.common.validation.AfterCurrentTime;
 import com.tth.common.validation.ValidRangeDateTime;
 import com.tth.persistence.constant.UserStatus;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.time.OffsetDateTime;
 @ValidRangeDateTime(from = "effectiveStart", to = "effectiveEnd")
 public class UserUpdateInput {
 
+	@NotNull
 	private UserStatus status;
 
 	@NotBlank

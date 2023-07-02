@@ -38,12 +38,12 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping
-	public Object post(@RequestBody @Valid UserCreateInput input) {
+	public Object create(@RequestBody @Valid UserCreateInput input) {
 		return responseProvider.ok(userService.create(input));
 	}
 
 	@PutMapping("{id}")
-	public Object post(@PathVariable String id, @RequestBody @Valid UserUpdateInput input) {
+	public Object update(@PathVariable String id, @RequestBody @Valid UserUpdateInput input) {
 		userService.update(id, input);
 		return responseProvider.ok();
 	}
