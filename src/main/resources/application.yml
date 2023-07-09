@@ -33,6 +33,8 @@ springdoc:
     operations-sorter: alpha
     tags-sorter: alpha
 
+environment.mode: local
+
 logging:
   level:
     org:
