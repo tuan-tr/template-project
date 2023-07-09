@@ -4,15 +4,15 @@ server:
 
 spring:
   # profiles.include: json-logging
-  datasource:
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USERNAME}
-    password: ${DATASOURCE_PASSWORD}
+  # datasource:
+  #   url: ${DATASOURCE_URL}
+  #   username: ${DATASOURCE_USERNAME}
+  #   password: ${DATASOURCE_PASSWORD}
   jpa:
     open-in-view: false
     properties:
       hibernate:
-        default_schema: template
+        # default_schema: template
   flyway:
     enabled: true
     schemas: template
