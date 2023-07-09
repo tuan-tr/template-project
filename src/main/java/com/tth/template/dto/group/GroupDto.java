@@ -1,6 +1,6 @@
-package com.tth.template.dto.user;
+package com.tth.template.dto.group;
 
-import com.tth.persistence.constant.UserStatus;
+import com.tth.persistence.constant.GroupStatus;
 import com.tth.template.dto.AuditDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,23 +8,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.OffsetDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @SuperBuilder
-public class UserDto extends AuditDto {
+public class GroupDto extends AuditDto {
 
 	private String id;
 
-	private UserStatus status;
+	private GroupStatus status;
 
 	private String name;
 
-	private OffsetDateTime effectiveStart;
-
-	private OffsetDateTime effectiveEnd;
+	private List<UserGroupDto> userGroups;
 
 }

@@ -10,6 +10,13 @@ spring:
   #   password: ${DATASOURCE_PASSWORD}
   jpa:
     open-in-view: false
+    properties:
+      hibernate:
+        # default_schema: template
+  flyway:
+    enabled: true
+    schemas: template
+    locations: classpath:db/migration
   mvc:
     throw-exception-if-no-handler-found: true
   web:
@@ -33,7 +40,7 @@ logging:
     org:
       hibernate:
         SQL: ${HIBERNATE_SQL_LOG_LEVEL:INFO}
-        orm.jdbc.bind: ${HIBERNATE_SQL_BINDER_LOG_LEVEL:INFO}
+        orm.jdbc.bind: ${HIBERNATE_SQL_BINDING_LOG_LEVEL:INFO}
     com.tth.common.log:
       GetRequestLogger: ${GET_REQUEST_LOG_LEVEL:DEBUG}
       RequestResponseBodyLoggerAdvice: ${REQUEST_RESPONSE_BODY_LOG_LEVEL:DEBUG}

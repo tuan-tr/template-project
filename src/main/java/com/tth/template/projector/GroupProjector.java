@@ -1,42 +1,38 @@
 package com.tth.template.projector;
 
-import com.tth.persistence.entity.User;
-import com.tth.template.dto.user.UserDto;
+import com.tth.persistence.entity.Group;
+import com.tth.template.dto.group.GroupDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserProjector {
+public class GroupProjector {
 
-	public static UserDto toDetailDto(User entity) {
-		return UserDto.builder()
+	public static GroupDto toDetailDto(Group entity) {
+		return GroupDto.builder()
 				.createdAt(entity.getCreatedAt())
 				.createdBy(entity.getCreatedBy())
 				.updatedAt(entity.getUpdatedAt())
 				.updatedBy(entity.getUpdatedBy())
 				.id(entity.getId())
-				.name(entity.getName())
 				.status(entity.getStatus())
-				.effectiveStart(entity.getEffectiveStart())
-				.effectiveEnd(entity.getEffectiveEnd())
+				.name(entity.getName())
 				.build();
 	}
 
-	public static List<UserDto> toSearchDto(List<User> entities) {
+	public static List<GroupDto> toSearchDto(List<Group> entities) {
 		return entities.stream()
 				.map(e -> toSearchDto(e))
 				.collect(Collectors.toList());
 	}
 
-	public static UserDto toSearchDto(User entity) {
-		return UserDto.builder()
+	public static GroupDto toSearchDto(Group entity) {
+		return GroupDto.builder()
 				.updatedAt(entity.getUpdatedAt())
 				.updatedBy(entity.getUpdatedBy())
 				.id(entity.getId())
-				.name(entity.getName())
 				.status(entity.getStatus())
-				.effectiveStart(entity.getEffectiveStart())
-				.effectiveEnd(entity.getEffectiveEnd())
+				.name(entity.getName())
 				.build();
 	}
 

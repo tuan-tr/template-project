@@ -22,9 +22,9 @@ public class UserFilter {
 
 	private String name;
 
-	private OffsetDateTime effectiveFrom;
+	private OffsetDateTime effectiveStart;
 
-	private OffsetDateTime effectiveTo;
+	private OffsetDateTime effectiveEnd;
 
 	private OffsetDateTime createdFrom;
 

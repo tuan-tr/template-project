@@ -22,8 +22,10 @@ import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
-@SecurityScheme(name = "bearerToken", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
-@OpenAPIDefinition(info = @Info(title = "APIs", version = "0.0.1"), security = { @SecurityRequirement(name = "bearerToken") })
+// @SecurityScheme(name = "bearerToken", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
+@OpenAPIDefinition(info = @Info(title = "APIs", version = "0.0.1")
+// , security = { @SecurityRequirement(name = "bearerToken") }
+)
 public class OpenApiConfiguration {
 
 	@Value("${server.external-mapping-url:}")
