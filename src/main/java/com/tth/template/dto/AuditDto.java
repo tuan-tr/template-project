@@ -1,22 +1,26 @@
-package com.tth.template.dto.group;
+package com.tth.template.dto;
 
-import com.tth.template.dto.AuditDto;
-import com.tth.template.dto.user.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.OffsetDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @SuperBuilder
-public class UserGroupDto extends AuditDto {
+public abstract class AuditDto {
 
-	private UserDto user;
+	private OffsetDateTime createdAt;
 
-	private GroupDto group;
+	private String createdBy;
+
+	private OffsetDateTime updatedAt;
+
+	private String updatedBy;
 
 }

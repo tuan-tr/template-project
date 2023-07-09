@@ -1,29 +1,21 @@
 package com.tth.template.dto.group;
 
 import com.tth.persistence.constant.GroupStatus;
+import com.tth.template.dto.AuditDto;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
-public class GroupDto {
-
-	private OffsetDateTime createdAt;
-
-	private String createdBy;
-
-	private OffsetDateTime updatedAt;
-
-	private String updatedBy;
+@SuperBuilder
+public class GroupDto extends AuditDto {
 
 	private String id;
 

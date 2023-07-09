@@ -63,7 +63,7 @@ public class UserController {
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime createdFrom,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime createdTo,
 			@RequestParam(required = false) String keyword,
-			@SortDefault(sort = Sortable.CREATED_AT, direction = Sort.Direction.DESC) Pageable pageable
+			@SortDefault(sort = Sortable.UPDATED_AT, direction = Sort.Direction.DESC) Pageable pageable
 	) {
 		SortableProvider.validate(pageable.getSort(), Sortable.USER);
 		UserFilter filter = UserFilter.builder()
@@ -83,9 +83,8 @@ public class UserController {
 	@GetMapping("querydsl")
 	public Object search(
 			@QuerydslPredicate(root = User.class) Predicate predicate,
-			@SortDefault(sort = Sortable.CREATED_AT, direction = Sort.Direction.DESC) Pageable pageable
+			@SortDefault(sort = Sortable.UPDATED_AT, direction = Sort.Direction.DESC) Pageable pageable
 	) {
-		SortableProvider.validate(pageable.getSort(), Sortable.USER);
 		return responseProvider.ok(userService.search(predicate, pageable));
 	}
 

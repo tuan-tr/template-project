@@ -1,10 +1,12 @@
 package com.tth.template.service;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.tth.common.exception.BadBusinessRequestException;
 import com.tth.common.exception.DataNotFoundException;
 import com.tth.persistence.constant.GroupStatus;
 import com.tth.persistence.entity.Group;
+import com.tth.persistence.entity.QUserGroup;
 import com.tth.persistence.entity.User;
 import com.tth.persistence.entity.UserGroup;
 import com.tth.persistence.repository.GroupRepository;
@@ -15,8 +17,10 @@ import com.tth.template.dto.group.GroupCreateInput;
 import com.tth.template.dto.group.GroupDto;
 import com.tth.template.dto.group.GroupRemoveUserInput;
 import com.tth.template.dto.group.GroupUpdateInput;
+import com.tth.template.dto.group.UserGroupDto;
 import com.tth.template.exception.ErrorCode;
 import com.tth.template.projector.GroupProjector;
+import com.tth.template.projector.UserGroupProjector;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.domain.Page;
@@ -119,6 +123,18 @@ public class GroupService {
 	public Page<GroupDto> search(Predicate predicate, Pageable pageable) {
 		Page<Group> page = groupRepo.findAll(predicate, pageable);
 		List<GroupDto> content = GroupProjector.toSearchDto(page.getContent());
+		return new PageImpl<>(content, pageable, page.getTotalElements());
+	}
+
+	@Transactional(readOnly = true)
+	public Page<UserGroupDto> searchUser(String groupId, Predicate predicate, Pageable pageable) {
+		QUserGroup qType = QUserGroup.userGroup;
+		BooleanBuilder booleanBuilder = new BooleanBuilder()
+				.and(qType.groupId.eq(groupId))
+				.and(predicate);
+		
+		Page<UserGroup> page = userGroupRepo.findAll(booleanBuilder, pageable);
+		List<UserGroupDto> content = UserGroupProjector.toSearchDto(page.getContent());
 		return new PageImpl<>(content, pageable, page.getTotalElements());
 	}
 

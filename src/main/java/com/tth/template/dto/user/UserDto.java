@@ -1,29 +1,21 @@
 package com.tth.template.dto.user;
 
-import java.time.OffsetDateTime;
-
 import com.tth.persistence.constant.UserStatus;
-
+import com.tth.template.dto.AuditDto;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+import java.time.OffsetDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
-public class UserDto {
-
-	private OffsetDateTime createdAt;
-
-	private String createdBy;
-
-	private OffsetDateTime updatedAt;
-
-	private String updatedBy;
+@SuperBuilder
+public class UserDto extends AuditDto {
 
 	private String id;
 

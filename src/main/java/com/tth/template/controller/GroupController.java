@@ -2,8 +2,8 @@ package com.tth.template.controller;
 
 import com.querydsl.core.types.Predicate;
 import com.tth.common.http.ResponseBodyProvider;
-import com.tth.common.util.SortableProvider;
 import com.tth.persistence.entity.Group;
+import com.tth.persistence.entity.UserGroup;
 import com.tth.template.constant.Sortable;
 import com.tth.template.dto.group.GroupAddUserInput;
 import com.tth.template.dto.group.GroupCreateInput;
@@ -64,10 +64,17 @@ public class GroupController {
 	@GetMapping("querydsl")
 	public Object search(
 			@QuerydslPredicate(root = Group.class) Predicate predicate,
-			@SortDefault(sort = Sortable.CREATED_AT, direction = Sort.Direction.DESC) Pageable pageable
+			@SortDefault(sort = Sortable.UPDATED_AT, direction = Sort.Direction.DESC) Pageable pageable
 	) {
-		SortableProvider.validate(pageable.getSort(), Sortable.USER);
 		return responseProvider.ok(groupService.search(predicate, pageable));
+	}
+
+	@GetMapping("{id}/user/querydsl")
+	public Object searchUser(@PathVariable String id,
+			@QuerydslPredicate(root = UserGroup.class) Predicate predicate,
+			@SortDefault(sort = Sortable.UPDATED_AT, direction = Sort.Direction.DESC) Pageable pageable
+	) {
+		return responseProvider.ok(groupService.searchUser(id, predicate, pageable));
 	}
 
 }
