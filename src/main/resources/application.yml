@@ -1,6 +1,9 @@
 server:
   port: ${SERVER_PORT:8080}
   servlet.context-path: ${SERVLET_CONTEXT_PATH:/template}
+  tomcat:
+    relaxed-path-chars: "[,]"
+    relaxed-query-chars: "[,]"
 
 spring:
   # profiles.include: json-logging
@@ -13,6 +16,7 @@ spring:
     properties:
       hibernate:
         # default_schema: template
+        enable_lazy_load_no_trans: true
   flyway:
     enabled: true
     schemas: template
@@ -23,6 +27,10 @@ spring:
     resources.add-mappings: false
     locale: vi
     supported-locales: vi,en
+  servlet:
+    multipart:
+      max-file-size: ${MULTIPART_MAX_FILE_SIZE:5MB}
+      max-request-size: ${MULTIPART_MAX_REQUEST_SIZE:5MB}
 
 springdoc:
   api-docs:
@@ -46,5 +54,5 @@ logging:
       RequestResponseBodyLoggerAdvice: ${REQUEST_RESPONSE_BODY_LOG_LEVEL:DEBUG}
 
 auth:
-  non-authenticated-paths: ${NON_AUTHENTICATED_PATHS:/actuator/**}
+  non-authenticated-paths: ${NON_AUTHENTICATED_PATHS:/actuator/**,/docs/**,/swagger-ui/**}
   cors-allowed-origins: ${CORS_ALLOWED_ORIGINS:}

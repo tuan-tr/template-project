@@ -5,8 +5,9 @@ import com.tth.common.http.ResponseBody;
 import com.tth.common.http.ResponseMetadata;
 import com.tth.common.i18n.Translator;
 import jakarta.validation.ConstraintViolationException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.data.mapping.PropertyReferenceException;
@@ -22,16 +23,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Log4j2
 public class ExceptionHandlerAdvice {
 
-	private Translator translator;
+	private final static String REQUIRED_BODY_MESSAGE = "Required request body is missing";
+	private final static String ASSERT_TRUE = "AssertTrue";
+
+	private final Translator translator;
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(BadBusinessRequestException.class)
@@ -69,10 +75,12 @@ public class ExceptionHandlerAdvice {
 	@ExceptionHandler(value = {
 		ConstraintViolationException.class,
 		MissingServletRequestParameterException.class,
+		MissingServletRequestPartException.class,
 		HttpMediaTypeNotSupportedException.class,
 		UnsupportedSortPropertyException.class,
 		ConversionFailedException.class,
 		PropertyReferenceException.class,
+		MultipartException.class,
 	})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	ResponseBody<?> handle(Exception ex, WebRequest request) {
@@ -83,8 +91,6 @@ public class ExceptionHandlerAdvice {
 		String code = extractErrorCode(ex.getClass().getSimpleName());
 		return new ResponseBody<>(new ResponseMetadata(code, ex.getMessage()));
 	}
-
-	private final static String REQUIRED_BODY_MESSAGE = "Required request body is missing";
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -118,16 +124,20 @@ public class ExceptionHandlerAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	ResponseBody<?> handle(BindException ex, WebRequest request) {
 		String code = extractErrorCode(ex.getClass().getSimpleName());
-		String message = ex.getFieldErrors().stream()
+		String messages = ex.getFieldErrors().stream()
 				.map(e -> {
-					if (e.getCode().equals("AssertTrue")) {
+					boolean needToTranslate = e.getDefaultMessage().contains(StringUtils.SPACE) == false;
+					if (needToTranslate) {
+						return translator.toLocale(e.getDefaultMessage());
+					}
+					if (ASSERT_TRUE.equals(e.getCode())) {
 						return e.getDefaultMessage();
 					}
 					return String.format("%s %s", e.getField(), e.getDefaultMessage());
 				})
 				.collect(Collectors.joining("\n"));
 
-		ResponseBody<?> response = new ResponseBody<>(new ResponseMetadata(code, message, ex.getFieldErrors()));
+		ResponseBody<?> response = new ResponseBody<>(new ResponseMetadata(code, messages, ex.getFieldErrors()));
 		return response;
 	}
 
