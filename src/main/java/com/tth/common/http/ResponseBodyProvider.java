@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ResponseBodyProvider {
 
-	private final String OK = "OK";
+	private static final String OK = "OK";
 
 	private Translator translator;
 

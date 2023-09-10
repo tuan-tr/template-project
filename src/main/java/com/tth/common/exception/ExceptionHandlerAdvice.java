@@ -34,8 +34,8 @@ import java.util.stream.Collectors;
 @Log4j2
 public class ExceptionHandlerAdvice {
 
-	private final static String REQUIRED_BODY_MESSAGE = "Required request body is missing";
-	private final static String ASSERT_TRUE = "AssertTrue";
+	private static final String REQUIRED_BODY_MESSAGE = "Required request body is missing";
+	private static final String ASSERT_TRUE = "AssertTrue";
 
 	private final Translator translator;
 
