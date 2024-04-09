@@ -1,13 +1,15 @@
 package com.tth.template.controller;
 
 import com.querydsl.core.types.Predicate;
-import com.tth.common.http.ResponseBodyProvider;
+import com.tth.common.http.PageResponseBody;
+import com.tth.common.http.SuccessfulResponseBody;
 import com.tth.common.util.SortableProvider;
 import com.tth.persistence.constant.UserStatus;
 import com.tth.persistence.entity.User;
 import com.tth.persistence.provider.filter.UserFilter;
 import com.tth.template.constant.Sortable;
 import com.tth.template.dto.user.UserCreateInput;
+import com.tth.template.dto.user.UserDto;
 import com.tth.template.dto.user.UserUpdateInput;
 import com.tth.template.service.UserService;
 import jakarta.validation.Valid;
@@ -34,27 +36,25 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserController {
 
-	private ResponseBodyProvider responseProvider;
 	private UserService userService;
 
 	@PostMapping
-	public Object create(@RequestBody @Valid UserCreateInput input) {
-		return responseProvider.ok(userService.create(input));
+	public SuccessfulResponseBody<UserDto> create(@RequestBody @Valid UserCreateInput input) {
+		return new SuccessfulResponseBody<>(userService.create(input));
 	}
 
 	@PutMapping("{id}")
-	public Object update(@PathVariable String id, @RequestBody @Valid UserUpdateInput input) {
+	public void update(@PathVariable String id, @RequestBody @Valid UserUpdateInput input) {
 		userService.update(id, input);
-		return responseProvider.ok();
 	}
 
 	@GetMapping("{id}")
-	public Object get(@PathVariable String id) {
-		return responseProvider.ok(userService.getDetail(id));
+	public SuccessfulResponseBody<UserDto> get(@PathVariable String id) {
+		return new SuccessfulResponseBody<>(userService.getDetail(id));
 	}
 
 	@GetMapping
-	public Object searchPaging(
+	public PageResponseBody<UserDto> searchPaging(
 			@RequestParam(required = false) Set<String> ids,
 			@RequestParam(required = false) Set<UserStatus> statuses,
 			@RequestParam(required = false) String name,
@@ -77,15 +77,15 @@ public class UserController {
 				.keyword(keyword)
 				.build();
 		
-		return responseProvider.ok(userService.searchPaging(filter, pageable));
+		return new PageResponseBody<>(userService.searchPaging(filter, pageable));
 	}
 
 	@GetMapping("querydsl")
-	public Object search(
+	public PageResponseBody<UserDto> search(
 			@QuerydslPredicate(root = User.class) Predicate predicate,
 			@SortDefault(sort = Sortable.UPDATED_AT, direction = Sort.Direction.DESC) Pageable pageable
 	) {
-		return responseProvider.ok(userService.search(predicate, pageable));
+		return new PageResponseBody<>(userService.search(predicate, pageable));
 	}
 
 }

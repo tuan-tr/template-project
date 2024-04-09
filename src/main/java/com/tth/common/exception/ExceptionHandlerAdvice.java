@@ -1,8 +1,8 @@
 package com.tth.common.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.tth.common.http.ResponseBody;
-import com.tth.common.http.ResponseMetadata;
+import com.google.common.base.CaseFormat;
+import com.tth.common.http.FailureResponseBody;
 import com.tth.common.i18n.Translator;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -41,34 +41,34 @@ public class ExceptionHandlerAdvice {
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(BadBusinessRequestException.class)
-	ResponseBody<?> handle(BadBusinessRequestException ex, WebRequest request) {
+	FailureResponseBody handle(BadBusinessRequestException ex, WebRequest request) {
 		String message = translator.toLocale(ex.getCode(), ex.getDetails());
-		return new ResponseBody<>(new ResponseMetadata(ex.getCode(), message, ex.getDetails()));
+		return new FailureResponseBody(ex.getCode(), message, ex.getDetails());
 	}
 
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(DataNotFoundException.class)
-	ResponseBody<?> handle(DataNotFoundException ex, WebRequest request) {
+	FailureResponseBody handle(DataNotFoundException ex, WebRequest request) {
 		String message = translator.toLocale(ex.getCode(), ex.getDetails());
-		return new ResponseBody<>(new ResponseMetadata(ex.getCode(), message, ex.getDetails()));
+		return new FailureResponseBody(ex.getCode(), message, ex.getDetails());
 	}
 
 
 	@ExceptionHandler(NoHandlerFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	ResponseBody<?> handle(NoHandlerFoundException ex, WebRequest request) {
+	FailureResponseBody handle(NoHandlerFoundException ex, WebRequest request) {
 		return generalHandle(ex);
 	}
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-	ResponseBody<?> handle(HttpRequestMethodNotSupportedException ex, WebRequest request) {
+	FailureResponseBody handle(HttpRequestMethodNotSupportedException ex, WebRequest request) {
 		return generalHandle(ex);
 	}
 
 	@ExceptionHandler(AuthenticationException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	ResponseBody<?> handle(AuthenticationException ex, WebRequest request) {
+	FailureResponseBody handle(AuthenticationException ex, WebRequest request) {
 		return generalHandle(ex);
 	}
 
@@ -83,21 +83,20 @@ public class ExceptionHandlerAdvice {
 		MultipartException.class,
 	})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	ResponseBody<?> handle(Exception ex, WebRequest request) {
+	FailureResponseBody handle(Exception ex, WebRequest request) {
 		return generalHandle(ex);
 	}
 
-	private ResponseBody<?> generalHandle(Exception ex) {
-		String code = extractErrorCode(ex.getClass().getSimpleName());
-		return new ResponseBody<>(new ResponseMetadata(code, ex.getMessage()));
+	private FailureResponseBody generalHandle(Exception ex) {
+		String code = extractErrorCode(ex);
+		return new FailureResponseBody(code, ex.getMessage());
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	ResponseBody<?> handle(HttpMessageNotReadableException ex, WebRequest request) {
+	FailureResponseBody handle(HttpMessageNotReadableException ex, WebRequest request) {
 		Throwable cause = ex.getMostSpecificCause();
-		String error = cause.getClass().getSimpleName();
-		String code = extractErrorCode(error);
+		String code = extractErrorCode(cause);
 		String message = cause.getLocalizedMessage();
 		if (cause instanceof JsonProcessingException) {
 			message = ((JsonProcessingException) cause).getOriginalMessage();
@@ -105,25 +104,24 @@ public class ExceptionHandlerAdvice {
 			message = REQUIRED_BODY_MESSAGE;
 		}
 
-		ResponseBody<?> response = new ResponseBody<>(new ResponseMetadata(code, message));
+		FailureResponseBody response = new FailureResponseBody(code, message);
 		return response;
 	}
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	ResponseBody<?> handle(MethodArgumentTypeMismatchException ex, WebRequest request) {
+	FailureResponseBody handle(MethodArgumentTypeMismatchException ex, WebRequest request) {
 		Throwable cause = ex.getMostSpecificCause();
-		String error = cause.getClass().getSimpleName();
-		String code = extractErrorCode(error);
+		String code = extractErrorCode(cause);
 		String message = cause.getLocalizedMessage();
-		ResponseBody<?> response = new ResponseBody<>(new ResponseMetadata(code, message));
+		FailureResponseBody response = new FailureResponseBody(code, message);
 		return response;
 	}
 
 	@ExceptionHandler(BindException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	ResponseBody<?> handle(BindException ex, WebRequest request) {
-		String code = extractErrorCode(ex.getClass().getSimpleName());
+	FailureResponseBody handle(BindException ex, WebRequest request) {
+		String code = extractErrorCode(ex);
 		String messages = ex.getFieldErrors().stream()
 				.map(e -> {
 					boolean needToTranslate = e.getDefaultMessage().contains(StringUtils.SPACE) == false;
@@ -137,21 +135,23 @@ public class ExceptionHandlerAdvice {
 				})
 				.collect(Collectors.joining("\n"));
 
-		ResponseBody<?> response = new ResponseBody<>(new ResponseMetadata(code, messages, ex.getFieldErrors()));
+		FailureResponseBody response = new FailureResponseBody(code, messages, ex.getFieldErrors());
 		return response;
-	}
-
-	private String extractErrorCode(String exceptionName) {
-		return exceptionName.substring(0, exceptionName.length() - 9).toUpperCase();
 	}
 
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	ResponseBody<?> remainingHandle(Exception ex, WebRequest request) {
+	FailureResponseBody remainingHandle(Exception ex, WebRequest request) {
 		log.error(ExceptionUtils.getStackTrace(ex));
 		String code = HttpStatus.INTERNAL_SERVER_ERROR.name();
 		String message = translator.toLocale(code);
-		return new ResponseBody<>(new ResponseMetadata(code, message));
+		return new FailureResponseBody(code, message);
+	}
+
+	private String extractErrorCode(Throwable exception) {
+		String exceptionName = exception.getClass().getSimpleName();
+		String error = exceptionName.substring(0, exceptionName.length() - 9);
+		return CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, error);
 	}
 
 }

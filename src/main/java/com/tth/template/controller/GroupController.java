@@ -1,14 +1,17 @@
 package com.tth.template.controller;
 
 import com.querydsl.core.types.Predicate;
-import com.tth.common.http.ResponseBodyProvider;
+import com.tth.common.http.PageResponseBody;
+import com.tth.common.http.SuccessfulResponseBody;
 import com.tth.persistence.entity.Group;
 import com.tth.persistence.entity.UserGroup;
 import com.tth.template.constant.Sortable;
 import com.tth.template.dto.group.GroupAddUserInput;
 import com.tth.template.dto.group.GroupCreateInput;
+import com.tth.template.dto.group.GroupDto;
 import com.tth.template.dto.group.GroupRemoveUserInput;
 import com.tth.template.dto.group.GroupUpdateInput;
+import com.tth.template.dto.group.UserGroupDto;
 import com.tth.template.service.GroupService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -30,51 +33,47 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class GroupController {
 
-	private ResponseBodyProvider responseProvider;
 	private GroupService groupService;
 
 	@PostMapping
-	public Object create(@RequestBody @Valid GroupCreateInput input) {
-		return responseProvider.ok(groupService.create(input));
+	public SuccessfulResponseBody<GroupDto> create(@RequestBody @Valid GroupCreateInput input) {
+		return new SuccessfulResponseBody<>(groupService.create(input));
 	}
 
 	@PutMapping("{id}")
-	public Object update(@PathVariable String id, @RequestBody @Valid GroupUpdateInput input) {
+	public void update(@PathVariable String id, @RequestBody @Valid GroupUpdateInput input) {
 		groupService.update(id, input);
-		return responseProvider.ok();
 	}
 
 	@PostMapping("{id}/user")
-	public Object addUsers(@PathVariable String id, @RequestBody @Valid GroupAddUserInput input) {
+	public void addUsers(@PathVariable String id, @RequestBody @Valid GroupAddUserInput input) {
 		groupService.addUsers(id, input);
-		return responseProvider.ok();
 	}
 
 	@DeleteMapping("{id}/user")
-	public Object removeUsers(@PathVariable String id, @RequestBody @Valid GroupRemoveUserInput input) {
+	public void removeUsers(@PathVariable String id, @RequestBody @Valid GroupRemoveUserInput input) {
 		groupService.removeUsers(id, input);
-		return responseProvider.ok();
 	}
 
 	@GetMapping("{id}")
-	public Object get(@PathVariable String id) {
-		return responseProvider.ok(groupService.getDetail(id));
+	public SuccessfulResponseBody<GroupDto> get(@PathVariable String id) {
+		return new SuccessfulResponseBody<>(groupService.getDetail(id));
 	}
 
 	@GetMapping("querydsl")
-	public Object search(
+	public PageResponseBody<GroupDto> search(
 			@QuerydslPredicate(root = Group.class) Predicate predicate,
 			@SortDefault(sort = Sortable.UPDATED_AT, direction = Sort.Direction.DESC) Pageable pageable
 	) {
-		return responseProvider.ok(groupService.search(predicate, pageable));
+		return new PageResponseBody<>(groupService.search(predicate, pageable));
 	}
 
 	@GetMapping("{id}/user/querydsl")
-	public Object searchUser(@PathVariable String id,
+	public PageResponseBody<UserGroupDto> searchUser(@PathVariable String id,
 			@QuerydslPredicate(root = UserGroup.class) Predicate predicate,
 			@SortDefault(sort = Sortable.UPDATED_AT, direction = Sort.Direction.DESC) Pageable pageable
 	) {
-		return responseProvider.ok(groupService.searchUser(id, predicate, pageable));
+		return new PageResponseBody<>(groupService.searchUser(id, predicate, pageable));
 	}
 
 }
