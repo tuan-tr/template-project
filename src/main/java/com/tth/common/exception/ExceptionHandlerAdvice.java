@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.CaseFormat;
 import com.tth.common.http.FailureResponseBody;
 import com.tth.common.i18n.Translator;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -48,26 +49,29 @@ public class ExceptionHandlerAdvice {
 
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(DataNotFoundException.class)
+	@Hidden
 	FailureResponseBody handle(DataNotFoundException ex, WebRequest request) {
 		String message = translator.toLocale(ex.getCode(), ex.getDetails());
 		return new FailureResponseBody(ex.getCode(), message, ex.getDetails());
 	}
 
-
 	@ExceptionHandler(NoHandlerFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@Hidden
 	FailureResponseBody handle(NoHandlerFoundException ex, WebRequest request) {
 		return generalHandle(ex);
 	}
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+	@Hidden
 	FailureResponseBody handle(HttpRequestMethodNotSupportedException ex, WebRequest request) {
 		return generalHandle(ex);
 	}
 
 	@ExceptionHandler(AuthenticationException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@Hidden
 	FailureResponseBody handle(AuthenticationException ex, WebRequest request) {
 		return generalHandle(ex);
 	}
