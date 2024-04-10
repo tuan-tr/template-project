@@ -1,7 +1,8 @@
 package com.tth.common.servletfilter;
 
+import com.fasterxml.uuid.Generators;
 import com.tth.common.http.CustomHttpHeaders;
-import com.tth.common.util.NanoIdUtils;
+import com.tth.common.util.AppConstant;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,11 +26,11 @@ public class RequestIdHandlerFilter extends OncePerRequestFilter {
 		String requestId = request.getHeader(CustomHttpHeaders.REQUEST_ID);
 		
 		if (StringUtils.isBlank(requestId)) {
-			requestId = NanoIdUtils.randomNanoId();
+			requestId = Generators.timeBasedEpochGenerator().generate().toString();
 		}
 		
 		response.addHeader(CustomHttpHeaders.REQUEST_ID, requestId);
-		ThreadContext.put("requestId", requestId);
+		ThreadContext.put(AppConstant.FLOW_ID, requestId);
 		
 		filterChain.doFilter(request, response);
 	}
