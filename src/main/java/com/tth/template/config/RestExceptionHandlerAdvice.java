@@ -1,9 +1,12 @@
-package com.tth.common.exception;
+package com.tth.template.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.CaseFormat;
+import com.tth.common.exception.BadBusinessRequestException;
+import com.tth.common.exception.DataNotFoundException;
+import com.tth.common.exception.UnsupportedSortPropertyException;
 import com.tth.common.http.FailureResponseBody;
 import com.tth.common.i18n.Translator;
+import com.tth.common.util.AppExceptionUtils;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +17,7 @@ import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -27,13 +30,14 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
 @Log4j2
-public class ExceptionHandlerAdvice {
+public class RestExceptionHandlerAdvice {
 
 	private static final String REQUIRED_BODY_MESSAGE = "Required request body is missing";
 	private static final String ASSERT_TRUE = "AssertTrue";
@@ -55,10 +59,13 @@ public class ExceptionHandlerAdvice {
 		return new FailureResponseBody(ex.getCode(), message, ex.getDetails());
 	}
 
-	@ExceptionHandler(NoHandlerFoundException.class)
+	@ExceptionHandler(value = {
+		NoHandlerFoundException.class,
+		NoResourceFoundException.class
+	})
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@Hidden
-	FailureResponseBody handle(NoHandlerFoundException ex, WebRequest request) {
+	FailureResponseBody notFoundHandle(Exception ex, WebRequest request) {
 		return generalHandle(ex);
 	}
 
@@ -69,10 +76,10 @@ public class ExceptionHandlerAdvice {
 		return generalHandle(ex);
 	}
 
-	@ExceptionHandler(AuthenticationException.class)
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
 	@Hidden
-	FailureResponseBody handle(AuthenticationException ex, WebRequest request) {
+	FailureResponseBody handle(AccessDeniedException ex, WebRequest request) {
 		return generalHandle(ex);
 	}
 
@@ -92,7 +99,7 @@ public class ExceptionHandlerAdvice {
 	}
 
 	private FailureResponseBody generalHandle(Exception ex) {
-		String code = extractErrorCode(ex);
+		String code = AppExceptionUtils.extractErrorCode(ex);
 		return new FailureResponseBody(code, ex.getMessage());
 	}
 
@@ -100,7 +107,7 @@ public class ExceptionHandlerAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	FailureResponseBody handle(HttpMessageNotReadableException ex, WebRequest request) {
 		Throwable cause = ex.getMostSpecificCause();
-		String code = extractErrorCode(cause);
+		String code = AppExceptionUtils.extractErrorCode(cause);
 		String message = cause.getLocalizedMessage();
 		if (cause instanceof JsonProcessingException) {
 			message = ((JsonProcessingException) cause).getOriginalMessage();
@@ -116,7 +123,7 @@ public class ExceptionHandlerAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	FailureResponseBody handle(MethodArgumentTypeMismatchException ex, WebRequest request) {
 		Throwable cause = ex.getMostSpecificCause();
-		String code = extractErrorCode(cause);
+		String code = AppExceptionUtils.extractErrorCode(cause);
 		String message = cause.getLocalizedMessage();
 		FailureResponseBody response = new FailureResponseBody(code, message);
 		return response;
@@ -125,7 +132,7 @@ public class ExceptionHandlerAdvice {
 	@ExceptionHandler(BindException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	FailureResponseBody handle(BindException ex, WebRequest request) {
-		String code = extractErrorCode(ex);
+		String code = AppExceptionUtils.extractErrorCode(ex);
 		String messages = ex.getFieldErrors().stream()
 				.map(e -> {
 					boolean needToTranslate = e.getDefaultMessage().contains(StringUtils.SPACE) == false;
@@ -150,12 +157,6 @@ public class ExceptionHandlerAdvice {
 		String code = HttpStatus.INTERNAL_SERVER_ERROR.name();
 		String message = translator.toLocale(code);
 		return new FailureResponseBody(code, message);
-	}
-
-	private String extractErrorCode(Throwable exception) {
-		String exceptionName = exception.getClass().getSimpleName();
-		String error = exceptionName.substring(0, exceptionName.length() - 9);
-		return CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, error);
 	}
 
 }
