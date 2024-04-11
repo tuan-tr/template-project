@@ -2,7 +2,7 @@ package com.tth.template.config.auth;
 
 import com.tth.common.http.FailureResponseBody;
 import com.tth.common.jackson.JsonParserProvider;
-import com.tth.common.util.ExceptionUtils;
+import com.tth.common.util.AppExceptionUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +56,7 @@ public final class AppBearerTokenAccessDeniedHandler implements AccessDeniedHand
 		response.addHeader(HttpHeaders.WWW_AUTHENTICATE, wwwAuthenticate);
 		response.setStatus(HttpStatus.FORBIDDEN.value());
 		
-		String code = ExceptionUtils.extractErrorCode(accessDeniedException);
+		String code = AppExceptionUtils.extractErrorCode(accessDeniedException);
 		FailureResponseBody body = new FailureResponseBody(code, accessDeniedException.getMessage());
 		response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 		response.getWriter().write(jsonParserProvider.toString(body));

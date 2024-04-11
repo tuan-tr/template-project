@@ -2,7 +2,7 @@ package com.tth.template.config.auth;
 
 import com.tth.common.http.FailureResponseBody;
 import com.tth.common.jackson.JsonParserProvider;
-import com.tth.common.util.ExceptionUtils;
+import com.tth.common.util.AppExceptionUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +69,7 @@ public final class AppBearerTokenAuthenticationEntryPoint implements Authenticat
 		response.addHeader(HttpHeaders.WWW_AUTHENTICATE, wwwAuthenticate);
 		response.setStatus(status.value());
 		
-		String code = ExceptionUtils.extractErrorCode(authException);
+		String code = AppExceptionUtils.extractErrorCode(authException);
 		FailureResponseBody body = new FailureResponseBody(code, authException.getMessage());
 		response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 		response.getWriter().write(jsonParserProvider.toString(body));
