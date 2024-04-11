@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.tth.common.jpa.FindPagingJpaProvider;
+import com.tth.common.jpa.CustomJpaRepositoryProvider;
 import com.tth.persistence.entity.User;
 import com.tth.persistence.provider.filter.UserFilter;
 import com.tth.persistence.repository.custom.UserCustomRepository;
@@ -18,7 +18,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UserCustomRepositoryImpl implements UserCustomRepository {
 
-	private FindPagingJpaProvider findPagingJpaProvider;
+	private CustomJpaRepositoryProvider findPagingJpaProvider;
 
 	@Override
 	public Page<User> findPaging(UserFilter filter, Pageable pageable) {
