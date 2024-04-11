@@ -2,7 +2,7 @@ package com.tth.common.util;
 
 import com.google.common.base.CaseFormat;
 
-public class ExceptionUtils {
+public class AppExceptionUtils {
 
 	public static String extractErrorCode(Throwable exception) {
 		String exceptionName = exception.getClass().getSimpleName();
