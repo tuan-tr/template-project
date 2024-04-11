@@ -8,7 +8,6 @@ import com.tth.common.http.FailureResponseBody;
 import com.tth.common.i18n.Translator;
 import com.tth.common.util.AppExceptionUtils;
 import io.swagger.v3.oas.annotations.Hidden;
-import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
@@ -84,7 +83,6 @@ public class RestExceptionHandlerAdvice {
 	}
 
 	@ExceptionHandler(value = {
-		ConstraintViolationException.class,
 		MissingServletRequestParameterException.class,
 		MissingServletRequestPartException.class,
 		HttpMediaTypeNotSupportedException.class,
