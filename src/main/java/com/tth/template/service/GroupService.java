@@ -56,18 +56,19 @@ public class GroupService {
 				.name(input.getName())
 				.build();
 		
-		List<User> users = userRepo.findByIdIn(input.getUserIds());
-		List<UserGroup> userGroups = users.stream()
-				.map(e -> UserGroup.builder()
-						.user(e)
-						.group(entity)
-						.build())
-				.collect(Collectors.toList());
-		
-		entity.setUserGroups(userGroups);
+		if (CollectionUtils.isNotEmpty(input.getUserIds())) {
+			List<User> users = userRepo.findByIdIn(input.getUserIds());
+			List<UserGroup> userGroups = users.stream()
+					.map(e -> UserGroup.builder()
+							.user(e)
+							.group(entity)
+							.build())
+					.collect(Collectors.toList());
+			
+			entity.setUserGroups(userGroups);
+		}
 		
 		groupRepo.save(entity);
-		
 		return GroupDto.builder()
 				.id(entity.getId())
 				.build();
