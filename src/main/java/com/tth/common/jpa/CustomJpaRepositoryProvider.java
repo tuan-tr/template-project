@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class FindPagingJpaProvider {
+public class CustomJpaRepositoryProvider {
 
 	@PersistenceContext
 	private EntityManager em;
