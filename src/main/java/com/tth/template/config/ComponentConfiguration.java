@@ -1,31 +1,40 @@
 package com.tth.template.config;
 
 import com.tth.common.auth.AuthEnviroment;
+import com.tth.common.i18n.I18nConfiguration;
+import com.tth.common.i18n.Translator;
+import com.tth.common.jackson.JacksonConfiguration;
+import com.tth.common.jackson.JsonParserProvider;
+import com.tth.common.jpa.CustomJpaRepositoryProvider;
+import com.tth.common.log.GetRequestLogger;
+import com.tth.common.log.RequestResponseBodyLoggerAdvice;
 import com.tth.common.servletfilter.RequestIdHandlerFilter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
+@EnableJpaAuditing(auditorAwareRef = "auditorAware", dateTimeProviderRef = "dateTimeProvider")
 @EntityScan(basePackages = "com.tth.persistence.entity")
 @EnableJpaRepositories(basePackages = "com.tth.persistence.repository")
 @ConfigurationPropertiesScan(basePackageClasses = {
-		AuthEnviroment.class
-})
+				AuthEnviroment.class
+		})
 @ComponentScan(basePackages = {
-		"com.tth.common.auth",
-		"com.tth.common.exception",
-		"com.tth.common.http",
-		"com.tth.common.i18n",
-		"com.tth.common.jackson",
-		"com.tth.common.jpa",
-		"com.tth.common.log",
-		"com.tth.common.openapi",
-}, basePackageClasses = {
-	RequestIdHandlerFilter.class
-})
+				
+		}, basePackageClasses = {
+				RequestIdHandlerFilter.class,
+				I18nConfiguration.class,
+				Translator.class,
+				JacksonConfiguration.class,
+				JsonParserProvider.class,
+				GetRequestLogger.class,
+				RequestResponseBodyLoggerAdvice.class,
+				CustomJpaRepositoryProvider.class,
+		})
 public class ComponentConfiguration {
 
 }
