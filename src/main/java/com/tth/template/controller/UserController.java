@@ -7,6 +7,7 @@ import com.tth.common.util.SortableProvider;
 import com.tth.persistence.constant.UserStatus;
 import com.tth.persistence.entity.User;
 import com.tth.persistence.provider.filter.UserFilter;
+import com.tth.template.config.auth.AuthorityScope;
 import com.tth.template.constant.Sortable;
 import com.tth.template.dto.user.UserCreateInput;
 import com.tth.template.dto.user.UserDto;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.SortDefault;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,6 +56,7 @@ public class UserController {
 	}
 
 	@GetMapping
+	@PreAuthorize("hasAuthority('" + AuthorityScope.DEFAULT + "')")
 	public PageResponseBody<UserDto> searchPaging(
 			@RequestParam(required = false) Set<String> ids,
 			@RequestParam(required = false) Set<UserStatus> statuses,

@@ -2,6 +2,7 @@ package com.tth.template.config.auth;
 
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTParser;
+import com.tth.common.util.AppConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.oauth2.jwt.BadJwtException;
@@ -27,11 +28,14 @@ public class AppJwtDecoder implements JwtDecoder {
 	public Jwt decode(String token) throws JwtException {
 		try {
 			JWT JWT = JWTParser.parse(token);
+			Map<String, Object> claims = JWT.getJWTClaimsSet().toJSONObject();
+			if (claims.get(AppConstant.USERNAME) == null) {
+				throw new BadJwtException(INVALID_TOKEN);
+			}
 			
 			Instant issueInstant = Optional.ofNullable(JWT.getJWTClaimsSet().getIssueTime()).map(e -> e.toInstant()).orElse(null);
 			Instant expirationInstant = Optional.ofNullable(JWT.getJWTClaimsSet().getExpirationTime()).map(e -> e.toInstant()).orElse(null);
 			
-			Map<String, Object> claims = JWT.getJWTClaimsSet().toJSONObject();
 			// claims.put("scope", scopes);
 			// claims.put(AppConstant.USERNAME, "username");
 			
