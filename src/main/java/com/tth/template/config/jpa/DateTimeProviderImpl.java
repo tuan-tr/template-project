@@ -1,4 +1,4 @@
-package com.tth.common.jpa;
+package com.tth.template.config.jpa;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.TemporalAccessor;
