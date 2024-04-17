@@ -6,8 +6,6 @@ import com.tth.common.i18n.Translator;
 import com.tth.common.jackson.JacksonConfiguration;
 import com.tth.common.jackson.JsonParserProvider;
 import com.tth.common.jpa.CustomJpaRepositoryProvider;
-import com.tth.common.log.GetRequestLogger;
-import com.tth.common.log.RequestResponseBodyLoggerAdvice;
 import com.tth.common.servletfilter.RequestIdHandlerFilter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -31,8 +29,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 				Translator.class,
 				JacksonConfiguration.class,
 				JsonParserProvider.class,
-				GetRequestLogger.class,
-				RequestResponseBodyLoggerAdvice.class,
 				CustomJpaRepositoryProvider.class,
 		})
 public class ComponentConfiguration {
