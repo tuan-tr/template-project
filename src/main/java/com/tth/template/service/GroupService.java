@@ -113,7 +113,7 @@ public class GroupService {
 	@Transactional(readOnly = true)
 	public GroupDto getDetail(String id) {
 		Group entity = groupRepo.findById(id)
-				.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND.name(),
+				.orElseThrow(() -> new DataNotFoundException(ErrorCode.GROUP_NOT_FOUND.name(),
 						Map.of("id", id)));
 		
 		GroupDto dto = GroupProjector.toDetailDto(entity);
