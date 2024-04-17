@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class BadBusinessRequestException extends RuntimeException {
+public class BadBusinessException extends RuntimeException {
 
 	private String code;
 	private Map<String, ?> details;

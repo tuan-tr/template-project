@@ -1,7 +1,7 @@
 package com.tth.template.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.tth.common.exception.BadBusinessRequestException;
+import com.tth.common.exception.BadBusinessException;
 import com.tth.common.exception.DataNotFoundException;
 import com.tth.common.exception.UnsupportedSortPropertyException;
 import com.tth.common.http.FailureResponseBody;
@@ -44,8 +44,8 @@ public class RestExceptionHandlerAdvice {
 	private final Translator translator;
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(BadBusinessRequestException.class)
-	FailureResponseBody handle(BadBusinessRequestException ex, WebRequest request) {
+	@ExceptionHandler(BadBusinessException.class)
+	FailureResponseBody handle(BadBusinessException ex, WebRequest request) {
 		String message = translator.toLocale(ex.getCode(), ex.getDetails());
 		return new FailureResponseBody(ex.getCode(), message, ex.getDetails());
 	}

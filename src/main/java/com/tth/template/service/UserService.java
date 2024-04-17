@@ -1,7 +1,7 @@
 package com.tth.template.service;
 
 import com.querydsl.core.types.Predicate;
-import com.tth.common.exception.BadBusinessRequestException;
+import com.tth.common.exception.BadBusinessException;
 import com.tth.common.exception.DataNotFoundException;
 import com.tth.persistence.constant.UserStatus;
 import com.tth.persistence.entity.User;
@@ -30,7 +30,7 @@ public class UserService {
 
 	public User getEntityOrThrowBadRequest(String id) {
 		return userRepo.findById(id)
-				.orElseThrow(() -> new BadBusinessRequestException(ErrorCode.USER_NOT_FOUND.name(),
+				.orElseThrow(() -> new BadBusinessException(ErrorCode.USER_NOT_FOUND.name(),
 						Map.of("id", id)));
 	}
 

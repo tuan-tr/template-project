@@ -2,7 +2,7 @@ package com.tth.template.service;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-import com.tth.common.exception.BadBusinessRequestException;
+import com.tth.common.exception.BadBusinessException;
 import com.tth.common.exception.DataNotFoundException;
 import com.tth.persistence.constant.GroupStatus;
 import com.tth.persistence.entity.Group;
@@ -45,7 +45,7 @@ public class GroupService {
 
 	public Group getEntityOrThrowBadRequest(String id) {
 		return groupRepo.findById(id)
-				.orElseThrow(() -> new BadBusinessRequestException(ErrorCode.GROUP_NOT_FOUND.name(),
+				.orElseThrow(() -> new BadBusinessException(ErrorCode.GROUP_NOT_FOUND.name(),
 						Map.of("id", id)));
 	}
 
