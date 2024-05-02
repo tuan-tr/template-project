@@ -22,7 +22,7 @@ public interface UserGroupRepository extends JpaRepository<UserGroup, String>,
 	@Override
 	default void customize(QuerydslBindings bindings, QUserGroup qType) {
 		bindings.bind(qType.groupId).first((path, value) -> path.eq(value));
-		bindings.bind(qType.user.id).all((path, values) -> Optional.of(path.in(values)));
+		bindings.bind(qType.userId).all((path, values) -> Optional.of(path.in(values)));
 		bindings.bind(qType.user.status).all((path, values) -> Optional.of(path.in(values)));
 		bindings.bind(String.class).first((StringPath path, String value) -> path.containsIgnoreCase(value));
 		bindings.excluding(qType.user.version);
