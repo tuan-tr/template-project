@@ -1,80 +1,82 @@
 package com.tth.persistence.repository.custom.impl;
 
-import com.tth.common.jpa.CustomJpaRepositoryProvider;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.tth.common.jpa.AppQuerydslUtils;
+import com.tth.persistence.entity.QUser;
 import com.tth.persistence.entity.User;
 import com.tth.persistence.provider.filter.UserFilter;
 import com.tth.persistence.repository.custom.UserCustomRepository;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserCustomRepositoryImpl implements UserCustomRepository {
 
-	private CustomJpaRepositoryProvider findPagingJpaProvider;
-
+	@PersistenceContext
+	private final EntityManager em;
+	
 	@Override
 	public Page<User> findPaging(UserFilter filter, Pageable pageable) {
-		StringBuilder countSqlBuilder = new StringBuilder(100)
-				.append("SELECT COUNT(u.id) FROM User u");
-		StringBuilder selectSqlBuilder = new StringBuilder(100)
-				.append("SELECT u FROM User u");
-		StringBuilder conditionJoinClauseSqlBuilder = new StringBuilder();
-		StringBuilder whereClauseSqlBuilder = new StringBuilder(50)
-				.append(" WHERE 1=1");
-		Map<String, Object> parameterMap = new LinkedHashMap<>();
+		List<User> entities;
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+		QUser user = QUser.user;
+		JPAQuery<User> selectQuery = queryFactory.selectFrom(user);
+		JPAQuery<Long> countQuery = queryFactory.select(user.count()).from(user);
 		
 		if (CollectionUtils.isNotEmpty(filter.getIds())) {
-			whereClauseSqlBuilder.append(" AND u.id IN (:ids)");
-			parameterMap.put("ids", filter.getIds());
+			selectQuery.where(user.id.in(filter.getIds()));
+			countQuery.where(user.id.in(filter.getIds()));
 		}
 		if (CollectionUtils.isNotEmpty(filter.getStatuses())) {
-			whereClauseSqlBuilder.append(" AND u.status IN (:statuses)");
-			parameterMap.put("statuses", filter.getStatuses());
+			selectQuery.where(user.status.in(filter.getStatuses()));
+			countQuery.where(user.status.in(filter.getStatuses()));
 		}
 		if (StringUtils.isNotBlank(filter.getName())) {
-			whereClauseSqlBuilder.append(" AND u.name LIKE :name");
-			parameterMap.put("name", "%" + filter.getName() + "%");
+			selectQuery.where(user.name.like("%" + filter.getName() + "%"));
+			countQuery.where(user.name.like("%" + filter.getName() + "%"));
 		}
 		if (filter.getEffectiveStart() != null) {
-			whereClauseSqlBuilder.append(" AND u.effectiveEnd >= :effectiveStart");
-			parameterMap.put("effectiveStart", filter.getEffectiveStart());
+			selectQuery.where(user.effectiveEnd.goe(filter.getEffectiveStart()));
+			countQuery.where(user.effectiveEnd.goe(filter.getEffectiveStart()));
 		}
 		if (filter.getEffectiveEnd() != null) {
-			whereClauseSqlBuilder.append(" AND u.effectiveStart <= :effectiveEnd");
-			parameterMap.put("effectiveEnd", filter.getEffectiveEnd());
+			selectQuery.where(user.effectiveStart.loe(filter.getEffectiveEnd()));
+			countQuery.where(user.effectiveStart.loe(filter.getEffectiveEnd()));
 		}
 		if (filter.getCreatedFrom() != null) {
-			whereClauseSqlBuilder.append(" AND u.createdAt >= :createdFrom");
-			parameterMap.put("createdFrom", filter.getCreatedFrom());
+			selectQuery.where(user.createdAt.goe(filter.getCreatedFrom()));
+			countQuery.where(user.createdAt.goe(filter.getCreatedFrom()));
 		}
 		if (filter.getCreatedTo() != null) {
-			whereClauseSqlBuilder.append(" AND u.createdAt <= :createdTo");
-			parameterMap.put("createdTo", filter.getCreatedTo());
+			selectQuery.where(user.createdAt.loe(filter.getCreatedTo()));
+			countQuery.where(user.createdAt.loe(filter.getCreatedTo()));
 		}
 		if (StringUtils.isNotBlank(filter.getKeyword())) {
-			whereClauseSqlBuilder.append(" AND (u.id = :keywordId OR u.name LIKE :keyword)");
-			parameterMap.put("keywordId", filter.getKeyword());
-			parameterMap.put("keyword", "%" + filter.getKeyword() + "%");
+			selectQuery.where(user.id.like("%" + filter.getKeyword() + "%").or(user.name.like("%" + filter.getKeyword() + "%")));
+			countQuery.where(user.id.like("%" + filter.getKeyword() + "%").or(user.name.like("%" + filter.getKeyword() + "%")));
 		}
 		
-		String orderClause = findPagingJpaProvider.makeOrderClause(pageable.getSort(), "u");
+		AppQuerydslUtils.setOrder(selectQuery, user, pageable.getSort());
 		
-		countSqlBuilder
-				.append(conditionJoinClauseSqlBuilder)
-				.append(whereClauseSqlBuilder);
+		entities = selectQuery.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetch();
 		
-		selectSqlBuilder
-				.append(conditionJoinClauseSqlBuilder)
-				.append(whereClauseSqlBuilder)
-				.append(orderClause);
-		
-		return findPagingJpaProvider.findPaging(countSqlBuilder.toString(), selectSqlBuilder.toString(), pageable, parameterMap, User.class);
+		if (CollectionUtils.isEmpty(entities)) {
+			return new PageImpl<>(entities, pageable, 0);
+		} else {
+			long total = countQuery.fetchFirst();
+			return new PageImpl<>(entities, pageable, total);
+		}
 	}
 
 }

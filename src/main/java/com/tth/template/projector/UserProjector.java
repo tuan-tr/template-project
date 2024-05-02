@@ -30,6 +30,8 @@ public class UserProjector {
 
 	public static UserDto toSearchDto(User entity) {
 		return UserDto.builder()
+				.createdAt(entity.getCreatedAt())
+				.createdBy(entity.getCreatedBy())
 				.updatedAt(entity.getUpdatedAt())
 				.updatedBy(entity.getUpdatedBy())
 				.id(entity.getId())
