@@ -1,19 +1,17 @@
 package com.tth.persistence.repository.custom.impl;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import com.tth.common.jpa.CustomJpaRepositoryProvider;
+import com.tth.persistence.entity.User;
+import com.tth.persistence.provider.filter.UserFilter;
+import com.tth.persistence.repository.custom.UserCustomRepository;
+import lombok.AllArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.tth.common.jpa.CustomJpaRepositoryProvider;
-import com.tth.persistence.entity.User;
-import com.tth.persistence.provider.filter.UserFilter;
-import com.tth.persistence.repository.custom.UserCustomRepository;
-
-import lombok.AllArgsConstructor;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @AllArgsConstructor
 public class UserCustomRepositoryImpl implements UserCustomRepository {
@@ -60,7 +58,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 			parameterMap.put("createdTo", filter.getCreatedTo());
 		}
 		if (StringUtils.isNotBlank(filter.getKeyword())) {
-			whereClauseSqlBuilder.append(" AND (u.code = :keywordId OR u.name LIKE :keyword)");
+			whereClauseSqlBuilder.append(" AND (u.id = :keywordId OR u.name LIKE :keyword)");
 			parameterMap.put("keywordId", filter.getKeyword());
 			parameterMap.put("keyword", "%" + filter.getKeyword() + "%");
 		}
